@@ -11,6 +11,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddRepositories();
 
+var dbConnectionString = builder.Configuration.GetConnectionString("Bootcamp");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -6,8 +6,8 @@ namespace Infraestructura.Repositories;
 public class CustomerRepository : ICustomerRepository
 {
     private static List<Customer> _customerList = [
-        new () { Id = 1, Name = "Jose" },
-        new () { Id = 2, Name = "Juan" }
+        new () { Id = 1, FirstName = "Jose" },
+        new () { Id = 2, FirstName = "Juan" }
     ];
 
     public List<Customer> List()
@@ -47,7 +47,7 @@ public class CustomerRepository : ICustomerRepository
             throw new Exception("No se ha encontrado al usuario");
 
         updateUser.Id = updateCustomer.Id;
-        updateUser.Name = updateCustomer.Name;
+        updateUser.FirstName = updateCustomer.FirstName;
 
         return updateUser;
     }
