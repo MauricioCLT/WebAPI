@@ -1,7 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace WebAPI.Controllers;
 
