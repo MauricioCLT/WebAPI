@@ -10,8 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddRepositories();
-
-var dbConnectionString = builder.Configuration.GetConnectionString("Bootcamp");
+builder.Services.AddDatabase(builder.Configuration);
 
 var app = builder.Build();
 

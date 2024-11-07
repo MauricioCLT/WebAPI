@@ -1,8 +1,9 @@
 ﻿using Core.Entities;
 using Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Controllers;
 
-namespace WebAPI.Controllers;
+namespace WebApi.Controllers;
 
 public class CustomerController : BaseApiController
 {
@@ -14,44 +15,32 @@ public class CustomerController : BaseApiController
     }
 
     [HttpGet("list")]
-    public IActionResult List()
+    public async Task<IActionResult> List()
     {
-        return Ok(_customerRepository.List());
+        return Ok(await _customerRepository.List());
     }
 
-    // Buscar por Id del usuario.
-    [HttpGet("getById/{id}")]
-    public IActionResult ListUser([FromRoute] int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
-        var getById = _customerRepository.GetById(id);
-
-        return Ok(getById);
+        return Ok(await _customerRepository.Get(id));
     }
 
-    // Agregar usuarios
-    [HttpPost("insert")]
-    public IActionResult InsertUsers([FromBody] Customer newcustomer)
+    [HttpPost("add")]
+    public async Task<IActionResult> Add([FromBody] Customer customer)
     {
-        var insert = _customerRepository.InsertUser(newcustomer);
-
-        return Ok(insert);
+        return Ok(await _customerRepository.Add(customer.FirstName, customer.LastName));
     }
 
-    // Actualizar
-    [HttpPut("update/{id}")]
-    public IActionResult updateUser([FromRoute] int id, [FromBody] Customer updateCustomer)
+    [HttpPut("update")]
+    public async Task<IActionResult> Update([FromBody] Customer customer)
     {
-        var update = _customerRepository.UpdateUser(id, updateCustomer);
-
-        return Ok(update);
+        return Ok(await _customerRepository.Update(customer.Id, customer.FirstName, customer.LastName));
     }
 
-    // Eliminar
-    [HttpDelete("delete/{id}")]
-    public IActionResult deleteUser([FromRoute] int id, Customer deleteCustomer)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        _customerRepository.DeleteUser(id, deleteCustomer);
-
-        return Ok();
+        return Ok(await _customerRepository.Delete(id));
     }
 }

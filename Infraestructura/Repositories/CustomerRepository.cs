@@ -1,56 +1,101 @@
 ﻿using Core.Entities;
+using Core.DTOs;
 using Core.Interfaces.Repositories;
+using Infraestructura.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infraestructura.Repositories;
 
 public class CustomerRepository : ICustomerRepository
 {
-    private static List<Customer> _customerList = [
-        new () { Id = 1, FirstName = "Jose" },
-        new () { Id = 2, FirstName = "Juan" }
-    ];
+    private readonly AplicationDbContext _context;
 
-    public List<Customer> List()
+    public CustomerRepository(AplicationDbContext context)
     {
-        return _customerList;
+        _context = context;        
     }
 
-    public void DeleteUser(int id, Customer customer)
+    public async Task<List<CustomerDTO>> Add(string firstName, string lastName)
     {
-        var result = _customerList.FirstOrDefault(x => x.Id == id);
-        if (result == null)
-            throw new Exception("No se ha encontrado al usuario");
+        var entity = new Customer
+        {
+            FirstName = firstName,
+            LastName = lastName,
+        };
 
-        _customerList.Remove(result);
+        _context.customers.Add(entity);
+        await _context.SaveChangesAsync();
+
+        return await List();
     }
 
-    public Customer GetById(int id)
+    public async Task<CustomerDTO> Delete(int id)
     {
-        var customerById = _customerList.FirstOrDefault(x => x.Id == id);
-        if (customerById == null)
-            throw new Exception("No se ha encontrado al usuario");
+        var entity = await _context.customers.FirstOrDefaultAsync(x => x.Id == id);
 
-        return customerById;
+        if (entity == null)
+            throw new Exception("No se encontro el Id");
+
+        var dtos = new CustomerDTO
+        {
+            Id = id,
+            FullName = $"{entity.FirstName} {entity.LastName}"
+        };
+
+        _context.customers.Remove(entity);
+        await _context.SaveChangesAsync();
+
+        return dtos;
     }
 
-    public Customer InsertUser(Customer customer)
+    public async Task<CustomerDTO> Get(int id)
     {
-        _customerList.Add(customer);
+        var entity = await _context.customers.FirstOrDefaultAsync(x => x.Id == id);
 
-        return customer;
+        if (entity == null)
+            throw new Exception("No se encontro el Id");
+
+        var dtos = new CustomerDTO
+        {
+            Id = id,
+            FullName = $"{entity.FirstName} {entity.LastName}"
+        };
+
+        return dtos;
     }
 
-    public Customer UpdateUser(int id, Customer updateCustomer)
+    public async Task<List<CustomerDTO>> List()
     {
-        var updateUser = _customerList.FirstOrDefault(x => x.Id == id);
+        var entities = await _context.customers.ToListAsync();
+
+        var dtos = entities.Select(customer => new CustomerDTO
+        {
+            Id = customer.Id,
+            FullName = $"{customer.FirstName} {customer.LastName}"
+        });
+
+        return dtos.ToList();
+    }
+
+    public async Task<CustomerDTO> Update(int id, string firstName, string lastName)
+    {
+        var updateUser = await _context.customers.FirstOrDefaultAsync(customer => customer.Id == id);
+
         if (updateUser == null)
-            throw new Exception("No se ha encontrado al usuario");
+            throw new Exception("No se ha encontrado el Id");
 
-        updateUser.Id = updateCustomer.Id;
-        updateUser.FirstName = updateCustomer.FirstName;
+        // updateUser.Id = id;
+        updateUser.FirstName = firstName;
+        updateUser.LastName = lastName;
 
-        return updateUser;
+        var dtos = new CustomerDTO
+        {
+            Id= id,
+            FullName = $"{updateUser.FirstName} {updateUser.LastName}"
+        };
+
+        await _context.SaveChangesAsync();
+
+        return dtos;
     }
-
-    // Tarea - Agregar - Actualizar, Eliminar, Buscar por Id
 }
