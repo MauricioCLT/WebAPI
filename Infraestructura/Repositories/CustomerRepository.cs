@@ -3,6 +3,7 @@ using Core.DTOs;
 using Core.Interfaces.Repositories;
 using Infraestructura.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Core.Request;
 
 namespace Infraestructura.Repositories;
 
@@ -15,7 +16,7 @@ public class CustomerRepository : ICustomerRepository
         _context = context;        
     }
 
-    public async Task<List<CustomerDTO>> Add(string firstName, string lastName)
+    public async Task<CustomerDTO> Add(string firstName, string lastName)
     {
         var entity = new Customer
         {
@@ -26,7 +27,13 @@ public class CustomerRepository : ICustomerRepository
         _context.customers.Add(entity);
         await _context.SaveChangesAsync();
 
-        return await List();
+        var dtos = new CustomerDTO
+        {
+            Id = entity.Id,
+            FullName = $"{entity.FirstName} {entity.LastName}"
+        };
+
+        return dtos;
     }
 
     public async Task<CustomerDTO> Delete(int id)
@@ -64,14 +71,20 @@ public class CustomerRepository : ICustomerRepository
         return dtos;
     }
 
-    public async Task<List<CustomerDTO>> List()
+    public async Task<List<CustomerDTO>> List(PaginationRequest request)
     {
         var entities = await _context.customers.ToListAsync();
 
-        var dtos = entities.Select(customer => new CustomerDTO
+        var dtos = entities
+            .Skip((request.Page -1) * request.PageSize)
+            .Take(request.PageSize)
+            .Select(customer => new CustomerDTO
         {
             Id = customer.Id,
-            FullName = $"{customer.FirstName} {customer.LastName}"
+            FullName = $"{customer.FirstName} {customer.LastName}",
+            Phone = customer.Phone,
+            Email = customer.Email,
+            BirthDate = customer.BirthDate.ToShortDateString(),
         });
 
         return dtos.ToList();
