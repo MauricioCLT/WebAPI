@@ -1,4 +1,7 @@
-﻿using Core.Interfaces.Repositories;
+﻿using Core.DTOs;
+using Core.Interfaces.Repositories;
+using Core.Validation;
+using FluentValidation;
 using Infraestructura.Contexts;
 using Infraestructura.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -26,5 +29,13 @@ public static class DependencyInjection
         });
 
         return service;
+    }
+
+    public static IServiceCollection AddValidations(this IServiceCollection services)
+    {
+        services.AddScoped<IValidator<CreateCustomerDTO>, CreateValidation>();
+        services.AddScoped<IValidator<UpdateCustomerDTO>, UpdateValidation>();
+
+        return services;
     }
 }

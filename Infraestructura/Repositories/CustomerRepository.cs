@@ -4,6 +4,7 @@ using Core.Interfaces.Repositories;
 using Infraestructura.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Core.Request;
+using FluentValidation;
 
 namespace Infraestructura.Repositories;
 
@@ -13,27 +14,33 @@ public class CustomerRepository : ICustomerRepository
 
     public CustomerRepository(AplicationDbContext context)
     {
-        _context = context;        
+        _context = context;
     }
 
-    public async Task<CustomerDTO> Add(string firstName, string lastName)
+    private CustomerDTO customerDTO(Customer customer) => new()
+    {
+        Id = customer.Id,
+        FullName = $"{customer.FirstName} {customer.LastName}",
+        Email = customer.Email,
+        Phone = customer.Phone,
+        BirthDate = customer.BirthDate.ToShortDateString()
+    };
+
+    public async Task<CustomerDTO> Add(CreateCustomerDTO createCustomerDTO)
     {
         var entity = new Customer
         {
-            FirstName = firstName,
-            LastName = lastName,
+            FirstName = createCustomerDTO.FirstName,
+            LastName = createCustomerDTO.LastName,
+            Email = createCustomerDTO.Email,
+            Phone = createCustomerDTO.Phone,
+            BirthDate = createCustomerDTO.BirthDate
         };
 
         _context.customers.Add(entity);
         await _context.SaveChangesAsync();
 
-        var dtos = new CustomerDTO
-        {
-            Id = entity.Id,
-            FullName = $"{entity.FirstName} {entity.LastName}"
-        };
-
-        return dtos;
+        return customerDTO(entity);
     }
 
     public async Task<CustomerDTO> Delete(int id)
@@ -43,16 +50,10 @@ public class CustomerRepository : ICustomerRepository
         if (entity == null)
             throw new Exception("No se encontro el Id");
 
-        var dtos = new CustomerDTO
-        {
-            Id = id,
-            FullName = $"{entity.FirstName} {entity.LastName}"
-        };
-
         _context.customers.Remove(entity);
         await _context.SaveChangesAsync();
 
-        return dtos;
+        return customerDTO(entity);
     }
 
     public async Task<CustomerDTO> Get(int id)
@@ -71,40 +72,44 @@ public class CustomerRepository : ICustomerRepository
         return dtos;
     }
 
-    public async Task<List<CustomerDTO>> List(PaginationRequest request)
+    public async Task<List<CustomerDTO>> List(PaginationRequest request, CancellationToken cancellationToken)
     {
-        var entities = await _context.customers.ToListAsync();
-
-        var dtos = entities
-            .Skip((request.Page -1) * request.PageSize)
+        var dtos = await _context.customers
+            .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
             .Select(customer => new CustomerDTO
-        {
-            Id = customer.Id,
-            FullName = $"{customer.FirstName} {customer.LastName}",
-            Phone = customer.Phone,
-            Email = customer.Email,
-            BirthDate = customer.BirthDate.ToShortDateString(),
-        });
+            {
+                Id = customer.Id,
+                FullName = $"{customer.FirstName} {customer.LastName}",
+                Phone = customer.Phone,
+                Email = customer.Email,
+                BirthDate = customer.BirthDate.ToShortDateString(),
+            }).OrderBy(x => x.Id).ToListAsync(cancellationToken);
 
-        return dtos.ToList();
+        return dtos;
     }
 
-    public async Task<CustomerDTO> Update(int id, string firstName, string lastName)
+    public async Task<CustomerDTO> Update(UpdateCustomerDTO updateCustomerDTO)
     {
-        var updateUser = await _context.customers.FirstOrDefaultAsync(customer => customer.Id == id);
+        var updateUser = await _context.customers.FirstOrDefaultAsync(customer => customer.Id == updateCustomerDTO.Id);
 
         if (updateUser == null)
             throw new Exception("No se ha encontrado el Id");
 
         // updateUser.Id = id;
-        updateUser.FirstName = firstName;
-        updateUser.LastName = lastName;
+        updateUser.FirstName = updateCustomerDTO.FirstName;
+        updateUser.LastName = updateCustomerDTO.LastName;
+        updateUser.Email = updateCustomerDTO.Email;
+        updateUser.Phone = updateCustomerDTO.Phone;
+        updateUser.BirthDate = updateCustomerDTO.BirthDate;
 
         var dtos = new CustomerDTO
         {
-            Id= id,
-            FullName = $"{updateUser.FirstName} {updateUser.LastName}"
+            Id = updateUser.Id,
+            FullName = $"{updateUser.FirstName} {updateUser.LastName}",
+            BirthDate = updateUser.BirthDate.ToShortDateString(),
+            Phone = updateUser.Phone,
+            Email = updateUser.Email,
         };
 
         await _context.SaveChangesAsync();

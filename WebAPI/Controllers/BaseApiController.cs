@@ -6,5 +6,4 @@ namespace WebAPI.Controllers;
 [Route("[controller]")]
 public class BaseApiController : ControllerBase
 {
-
 }
