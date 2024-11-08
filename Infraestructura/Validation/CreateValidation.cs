@@ -13,8 +13,8 @@ public class CreateValidation : AbstractValidator<CreateCustomerDTO>
         RuleFor(create => create.LastName)
             .Length(3, 40);
 
-        RuleFor(create => create.Phone)
-            .Length(10, 15);
+        RuleFor(create => create.Phone).Length(10, 15).Matches(@"^\d+$")
+                                       .WithMessage("El telefono deber contener solo digitos.");
 
         RuleFor(create => create.Email)
             .EmailAddress();
