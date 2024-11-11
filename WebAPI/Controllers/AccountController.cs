@@ -1,5 +1,4 @@
 ﻿using Core.Interfaces.Repositories;
-using Infraestructura.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;

@@ -4,8 +4,7 @@ using Core.Interfaces.Repositories;
 using Infraestructura.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Core.Request;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Principal;
+using Mapster;
 
 namespace Infraestructura.Repositories;
 
@@ -73,7 +72,7 @@ public class CustomerRepository : ICustomerRepository
             throw new Exception("No se encontro el Id");
 
 
-        return customerDTO(entity);
+        return entity.Adapt<CustomerDTO>();
     }
 
     public async Task<List<CustomerDTO>> List(PaginationRequest request, CancellationToken cancellationToken)
@@ -90,7 +89,7 @@ public class CustomerRepository : ICustomerRepository
                 BirthDate = customer.BirthDate.ToShortDateString(),
             }).OrderBy(x => x.Id).ToListAsync(cancellationToken);
 
-        return dtos;
+        return dtos.Adapt<List<CustomerDTO>>();
     }
 
     public async Task<CustomerDTO> Update(UpdateCustomerDTO updateCustomerDTO)
@@ -107,17 +106,10 @@ public class CustomerRepository : ICustomerRepository
         updateUser.Phone = updateCustomerDTO.Phone;
         updateUser.BirthDate = updateCustomerDTO.BirthDate;
 
-        var dtos = new CustomerDTO
-        {
-            Id = updateUser.Id,
-            FullName = $"{updateUser.FirstName} {updateUser.LastName}",
-            BirthDate = updateUser.BirthDate.ToShortDateString(),
-            Phone = updateUser.Phone,
-            Email = updateUser.Email,
-        };
+        updateCustomerDTO.Adapt<Customer>();
 
         await _context.SaveChangesAsync();
 
-        return dtos;
+        return updateUser.Adapt<CustomerDTO>();
     }
 }

@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Interfaces.Repositories;
 using Core.Request;
 using Infraestructura.Contexts;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infraestructura.Repositories;
@@ -34,11 +35,11 @@ public class AccountRepository : IAccountRepository
 
     public async Task<DetailedAccountDTO> GetById(int id)
     {
-        var entity =  await _context.Accounts.Include(x => x.Customer).FirstOrDefaultAsync(x => x.Id == id);
+        var entity = await _context.Accounts.Include(x => x.Customer).FirstOrDefaultAsync(x => x.Id == id);
 
         if (entity == null)
             throw new Exception("No se encontro el Id");
 
-        return accountDTO(entity);
+        return entity.Adapt<DetailedAccountDTO>();
     }
 }
