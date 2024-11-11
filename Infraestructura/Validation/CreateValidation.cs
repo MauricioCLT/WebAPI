@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Core.DTOs;
 
-namespace Core.Validation;
+namespace Infraestructura.Validation;
 
 public class CreateValidation : AbstractValidator<CreateCustomerDTO>
 {

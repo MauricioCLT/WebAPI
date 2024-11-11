@@ -7,4 +7,5 @@ public class CustomerDTO
     public string? Email { get; set; }
     public string? Phone { get; set; }
     public string BirthDate { get; set; } = string.Empty;
+    public List<DetailedCustomerDTO>? Accounts { get; set; }
 }

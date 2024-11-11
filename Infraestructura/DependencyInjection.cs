@@ -1,6 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Interfaces.Repositories;
-using Core.Validation;
+using Infraestructura.Validation;
 using FluentValidation;
 using Infraestructura.Contexts;
 using Infraestructura.Repositories;
@@ -15,6 +15,7 @@ public static class DependencyInjection
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
 
         return services;
     }

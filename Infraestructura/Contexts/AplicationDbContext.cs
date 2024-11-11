@@ -1,13 +1,13 @@
 ﻿using Core.Entities;
 using Infraestructura.Configurations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infraestructura.Contexts;
 
 public partial class AplicationDbContext : DbContext
 {
     public DbSet<Customer> customers { get; set; }
+    public DbSet<Account> Accounts { get; set; }
 
     public AplicationDbContext()
     {}
@@ -16,7 +16,8 @@ public partial class AplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new CustomerConfiguration());   
+        modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+        modelBuilder.ApplyConfiguration(new AccountConfiguration());
     }
 
     partial void OnModelCratingPartial(ModelBuilder modelBuilder);

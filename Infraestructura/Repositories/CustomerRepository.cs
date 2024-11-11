@@ -4,7 +4,8 @@ using Core.Interfaces.Repositories;
 using Infraestructura.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Core.Request;
-using FluentValidation;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 
 namespace Infraestructura.Repositories;
 
@@ -23,7 +24,15 @@ public class CustomerRepository : ICustomerRepository
         FullName = $"{customer.FirstName} {customer.LastName}",
         Email = customer.Email,
         Phone = customer.Phone,
-        BirthDate = customer.BirthDate.ToShortDateString()
+        BirthDate = customer.BirthDate.ToShortDateString(),
+
+        Accounts = customer.Accounts.Select(x => new DetailedCustomerDTO
+        {
+            Id = x.Id,
+            Number = x.Number,
+            Balance = x.Balance,
+            OpeningDate = x.OpeningDate.ToShortDateString()
+        }).ToList()
     };
 
     public async Task<CustomerDTO> Add(CreateCustomerDTO createCustomerDTO)
@@ -58,18 +67,13 @@ public class CustomerRepository : ICustomerRepository
 
     public async Task<CustomerDTO> Get(int id)
     {
-        var entity = await _context.customers.FirstOrDefaultAsync(x => x.Id == id);
+        var entity = await _context.customers.Include(x => x.Accounts).FirstOrDefaultAsync(x => x.Id == id);
 
         if (entity == null)
             throw new Exception("No se encontro el Id");
 
-        var dtos = new CustomerDTO
-        {
-            Id = id,
-            FullName = $"{entity.FirstName} {entity.LastName}"
-        };
 
-        return dtos;
+        return customerDTO(entity);
     }
 
     public async Task<List<CustomerDTO>> List(PaginationRequest request, CancellationToken cancellationToken)
