@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Customer;
 using Core.Interfaces.Repositories;
 using Core.Request;
 using FluentValidation;

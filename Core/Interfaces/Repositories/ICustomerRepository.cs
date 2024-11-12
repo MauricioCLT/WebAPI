@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Customer;
 using Core.Request;
 
 namespace Core.Interfaces.Repositories;

@@ -1,6 +1,8 @@
-﻿namespace Core.DTOs;
+﻿using Core.DTOs.Customer;
 
-public class DetailedCustomerDTO
+namespace Core.DTOs.Account;
+
+public class DetailedAccountDTO
 {
     public int Id { get; set; }
     public string Number { get; set; } = string.Empty;

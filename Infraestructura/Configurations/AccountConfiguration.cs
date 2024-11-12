@@ -22,5 +22,5 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         entity.HasOne(x => x.Customer)
               .WithMany(x => x.Accounts)
               .HasForeignKey(x => x.CustomerId);
-    }
+    }       
 }

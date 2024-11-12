@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Customer;
 using Core.Entities;
 using Mapster;
 
@@ -29,5 +29,9 @@ public class CustomersMappingConfiguration : IRegister
             .Map(dest => dest.Phone, src => src.Phone)
             .Map(dest => dest.Email, src => src.Email)
             .Map(dest => dest.BirthDate, src => src.BirthDate);
+
+        config.NewConfig<CreateCustomerDTO, Customer>()
+            .Map(dest => dest.FirstName, src => src.FirstName);
+
     }
 }

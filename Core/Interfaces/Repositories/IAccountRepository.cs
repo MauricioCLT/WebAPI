@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Account;
 
 namespace Core.Interfaces.Repositories;
 

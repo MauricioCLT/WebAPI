@@ -1,6 +1,4 @@
-﻿using Core.DTOs;
-using Core.Interfaces.Repositories;
-using Infraestructura.Validation;
+﻿using Core.Interfaces.Repositories;
 using FluentValidation;
 using Infraestructura.Contexts;
 using Infraestructura.Repositories;
@@ -10,6 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Mapster;
 using MapsterMapper;
 using System.Reflection;
+using Core.DTOs.Customer;
+using Infraestructura.Validation.Customer;
+using Core.DTOs.Card;
+using Infraestructura.Validation.Card;
 
 namespace Infraestructura;
 
@@ -31,6 +33,7 @@ public static class DependencyInjection
     {
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<ICardRepository, CardRepository>();
 
         return services;
     }
@@ -51,6 +54,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IValidator<CreateCustomerDTO>, CreateValidation>();
         services.AddScoped<IValidator<UpdateCustomerDTO>, UpdateValidation>();
+        services.AddScoped<IValidator<CreateCardDTO>, CreateCardValidation>();
 
         return services;
     }

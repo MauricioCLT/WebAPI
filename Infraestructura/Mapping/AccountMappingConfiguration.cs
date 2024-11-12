@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.Customer;
 using Core.Entities;
 using Mapster;
 
