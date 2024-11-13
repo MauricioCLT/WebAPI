@@ -1,11 +1,9 @@
 ﻿using Core.DTOs.Card;
 using Core.Entities;
 using Core.Interfaces.Repositories;
-using Core.Request;
 using Infraestructura.Contexts;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace Infraestructura.Repositories;
 

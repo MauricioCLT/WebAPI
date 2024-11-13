@@ -2,8 +2,6 @@
 using Core.Interfaces.Repositories;
 using Core.Request;
 using FluentValidation;
-using Infraestructura.Repositories;
-using Infraestructura.Validation.Card;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -38,7 +36,7 @@ public class CardController : BaseApiController
     [HttpGet("/Customers/{id}/Cards")]
     public async Task<IActionResult> GetCarsByCustomerId([FromRoute] int id)
     {
-        return Ok(await _cardRepository.GetCardsById(id));
+        return Ok(await _cardRepository.GetCarsByCustomerId(id));
     }
 
     //[HttpGet("list")]
@@ -46,5 +44,4 @@ public class CardController : BaseApiController
     //{
     //    return Ok(await _customerRepository.List(request, cancellationToken));
     //}
-
 }

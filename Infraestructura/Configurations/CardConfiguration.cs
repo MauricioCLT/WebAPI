@@ -37,5 +37,13 @@ public class CardConfiguration : IEntityTypeConfiguration<Card>
         entity.HasOne(x => x.Customer)
             .WithMany(x => x.Cards)
             .HasForeignKey(x => x.CustomerId);
+
+        entity.HasMany(x => x.Payments)
+              .WithOne(x => x.Card)
+              .HasForeignKey(x => x.PaymentId);
+
+        entity.HasMany(x => x.Charges)
+              .WithOne(x => x.Card)
+              .HasForeignKey(x => x.ChargerId);
     }
 }

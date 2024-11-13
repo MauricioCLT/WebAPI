@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Card;
+using Core.DTOs.Charge;
 
 namespace Core.Interfaces.Repositories;
 

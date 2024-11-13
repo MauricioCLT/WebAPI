@@ -12,4 +12,6 @@ public class Card
     public DateTime ExpirationDate { get; set; }
     public float InterestRate { get; set; }
     public Customer Customer { get; set; } = null!;
+    public List<Payment> Payments { get; set; } = null!;
+    public List<Charge> Charges { get; set; } = null!;
 }
