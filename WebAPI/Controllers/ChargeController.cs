@@ -23,6 +23,6 @@ public class ChargeController : BaseApiController
         if (!result.IsValid)
             return BadRequest(result.Errors);
 
-        return Ok(await _chargeRepository.AddChargeById(id, createChargeDTO));
+        return Ok(await _chargeRepository.CreateCharge(id, createChargeDTO));
     }
 }

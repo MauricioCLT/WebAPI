@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Card;
+using Core.DTOs.Charge;
 using Core.Entities;
 using Core.Interfaces.Repositories;
 using Infraestructura.Contexts;
@@ -26,14 +27,14 @@ public class CardRepository : ICardRepository
         return entity.Cards.Adapt<List<CardDTO>>();
     }
 
-    public async Task<CardDTO> Add(CreateCardDTO createCardDTO)
+    public async Task<DetailedCardDTO> Add(CreateCardDTO createCardDTO)
     {
         var entity = createCardDTO.Adapt<Card>();
 
         _context.Cards.Add(entity);
         await _context.SaveChangesAsync();
 
-        return entity.Adapt<CardDTO>();
+        return entity.Adapt<DetailedCardDTO>();
     }
 
     public async Task<CardDTO> GetCardsById(int id)
@@ -43,5 +44,28 @@ public class CardRepository : ICardRepository
             throw new Exception("No se encontró el Id solicitado");
 
         return entity.Adapt<CardDTO>();
+    }
+
+    public async Task<ChargeDTO> CreateCharge(CreateChargeDTO createChargeDTO)
+    {
+        var chargeToCreate = createChargeDTO.Adapt<Charge>();
+
+        var card = await _context.Cards.FindAsync(createChargeDTO.CardId);
+        card!.AvailableCredit -= createChargeDTO.Amount;
+
+        _context.Charges.Add(chargeToCreate);
+        await _context.SaveChangesAsync();
+
+        return chargeToCreate.Adapt<ChargeDTO>();
+    }
+
+    public async Task<bool> VerifyChargeAmount(int cardId, decimal amount)
+    {
+        var card = await _context.Cards.FindAsync(cardId);
+
+        if (card == null)
+            throw new Exception("No se encontro la tarjeta con el id provisto");
+
+        return card.AvailableCredit >= amount;
     }
 }

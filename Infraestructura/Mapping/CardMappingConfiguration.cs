@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Card;
+using Core.DTOs.Charge;
 using Core.Entities;
 using Mapster;
 
@@ -12,7 +13,7 @@ public class CardMappingConfiguration : IRegister
         var random = new Random();
         string number = "";
 
-        for (int i = 0; i <= 16; i++)
+        for (int i = 0; i < 12; i++)
         {
             number += random.Next(0, 10);
         }
@@ -30,8 +31,24 @@ public class CardMappingConfiguration : IRegister
             .Map(dest => dest.CreditLimit, src => src.CreditLimit)
             .Map(dest => dest.ExpirationDate, src => src.ExpirationDate)
             .Map(dest => dest.InterestRate, src => src.InterestRate)
-            .Map(dest => dest.AvailableCredit, src => random.Next(100, 10000))
+            .Map(dest => dest.AvailableCredit, src => random.Next(100, 100000))
             .Map(dest => dest.Status, src => "active")
             .Map(dest => dest.CardNumber, src => GenerateRandomCardNumbers());
+
+        config.NewConfig<Card, DetailedCardDTO>()
+            .Map(dest => dest.CustomerId, src => src.CustomerId)
+            .Map(dest => dest.CreditLimit, src => src.CreditLimit)
+            .Map(dest => dest.ExpirationDate, src => src.ExpirationDate)
+            .Map(dest => dest.InterestRate, src => src.InterestRate)
+            .Map(dest => dest.AvailableCredit, src => src.AvailableCredit)
+            .Map(dest => dest.CardNumber, src => $"XXXX-XXXX-XXXX-{src.CardNumber.Substring(src.CardNumber.Length -4, 4)}");
+
+        config.NewConfig<Charge, ChargeDTO>()
+            .Map(dest => dest.ChargeId, src => src.ChargerId)
+            .Map(dest => dest.CardId, src => src.CardId)
+            .Map(dest => dest.Amount, src => src.Amount)
+            .Map(dest => dest.AvailableCredit, src => src.AvailableCredit)
+            .Map(dest => dest.Description, src => src.Description)
+            .Map(dest => dest.Date, src => src.Date.ToShortDateString());
     }
 }

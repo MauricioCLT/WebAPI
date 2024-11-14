@@ -16,6 +16,8 @@ using Core.DTOs.Charge;
 using Infraestructura.Validation.Charge;
 using Core.DTOs.Payment;
 using Infraestructura.Validation.Payment;
+using Core.Interfaces.Services;
+using Infraestructura.Services;
 
 namespace Infraestructura;
 
@@ -26,6 +28,7 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddRepositories();
+        services.AddServices();
         services.AddDatabase(configuration);
         services.AddValidations();
         services.AddMapping();
@@ -40,6 +43,7 @@ public static class DependencyInjection
         services.AddScoped<ICardRepository, CardRepository>();
         services.AddScoped<IChargeRepository, ChargeRepository>();
         services.AddScoped<IPaymentRepository, PaymentRepository>();
+        services.AddScoped<ITransactionsRepository, TransactionRepository>();
 
         return services;
     }
@@ -63,6 +67,13 @@ public static class DependencyInjection
         services.AddScoped<IValidator<CreateCardDTO>, CreateCardValidation>();
         services.AddScoped<IValidator<CreateChargeDTO>, CreateChargeValidation>();
         services.AddScoped<IValidator<CreatePaymentDTO>, CreatePaymentValidation>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<ICardServices, CardService>();
 
         return services;
     }
