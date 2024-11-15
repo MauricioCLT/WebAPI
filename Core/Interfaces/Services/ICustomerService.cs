@@ -5,6 +5,8 @@ namespace Core.Interfaces.Services;
 
 public interface ICustomerService
 {
-    // Task<EntityDTO> CreateEntity(CreateEntityDTO createEntityDTO);
-    // Task<ProductDTO> CreateProduct(CreateProductDTO createProductDTO);
+    Task<ResponseEntityDTO> CreateEntity(CreateEntityDTO createEntityDTO);
+    Task<ResponseEntityDTO> GetEntity(int entityId);
+    Task<ResponseProductDTO> CreateProduct(CreateProductDTO createProductDTO);
+    Task<ResponseProductDTO> GetProduct(int productId);
 }

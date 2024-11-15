@@ -1,6 +1,9 @@
-﻿namespace Core.DTOs.Entity;
+﻿using Core.DTOs.Product;
+
+namespace Core.DTOs.Entity;
 
 public class ResponseEntityDTO
 {
-    public int CustomerId { get; set; }
+    public string CustomerName { get; set; } = string.Empty;
+    public List<ClientEntityDTO> Entities { get; set; } = null!;
 }

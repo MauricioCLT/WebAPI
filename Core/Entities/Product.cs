@@ -11,4 +11,5 @@ public class Product
     // Relations
     public int EntityId { get; set; }
     public Entity Entity { get; set; } = null!;
+    public List<CustomerEntityProduct> CustomersEntitiesProducts { get; set; } = null!;
 }

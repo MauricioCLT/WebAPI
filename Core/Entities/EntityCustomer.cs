@@ -9,4 +9,5 @@ public class EntityCustomer
     // Relations to Entity and Customer Entities
     public Customer Customer { get; set; } = null!;
     public Entity Entity { get; set; } = null!;
+    public List<CustomerEntityProduct> CustomersEntitiesProducts { get; set; } = null!;
 }

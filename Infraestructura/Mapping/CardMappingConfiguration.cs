@@ -1,5 +1,6 @@
 ﻿using Core.DTOs.Card;
 using Core.DTOs.Charge;
+using Core.DTOs.Entity;
 using Core.DTOs.Payment;
 using Core.Entities;
 using Mapster;

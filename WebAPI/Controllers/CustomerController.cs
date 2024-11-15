@@ -10,14 +10,21 @@ namespace WebApi.Controllers;
 public class CustomerController : BaseApiController
 {
     private readonly ICustomerRepository _customerRepository;
+    private readonly IEntityRepository _entityRepository;
     private readonly IValidator<CreateCustomerDTO> _validateCreateCustomerDTO;
     private readonly IValidator<UpdateCustomerDTO> _updateCustomerDTO;
 
-    public CustomerController(ICustomerRepository customerRepository, IValidator<CreateCustomerDTO> validateCreateCustomerDTO, IValidator<UpdateCustomerDTO> updateCustomerDTO)
+    public CustomerController(
+        ICustomerRepository customerRepository, 
+        IValidator<CreateCustomerDTO> validateCreateCustomerDTO,
+        IValidator<UpdateCustomerDTO> updateCustomerDTO,
+        IEntityRepository entityRepository
+        )
     {
         _customerRepository = customerRepository;
         _validateCreateCustomerDTO = validateCreateCustomerDTO;
         _updateCustomerDTO = updateCustomerDTO;
+        _entityRepository = entityRepository;
     }
 
     [HttpGet("list")]
@@ -57,4 +64,11 @@ public class CustomerController : BaseApiController
     {
         return Ok(await _customerRepository.Delete(id));
     }
+
+    [HttpGet("Entities/{id}")]
+    public async Task<IActionResult> GetAllEntities(int id)
+    {
+        return Ok(await _entityRepository.GetEntities(id));
+    }
+
 }

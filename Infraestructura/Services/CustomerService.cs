@@ -1,27 +1,36 @@
 ﻿using Core.DTOs.Entity;
 using Core.DTOs.Product;
+using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 
 namespace Infraestructura.Services;
 
 public class CustomerService : ICustomerService
 {
-    //private readonly ICustomerService _customerService;
+    private readonly ICustomerRepository _customerRepository;
 
-    //public CustomerService(ICustomerService customerService)
-    //{
-    //    _customerService = customerService;
-    //}
+    public CustomerService(ICustomerRepository customerRepository)
+    {
+        _customerRepository = customerRepository;
+    }
 
-    //public async Task<EntityDTO> CreateEntity(CreateEntityDTO createEntityDTO)
-    //{
-    //    var createEntity = await _customerService.CreateEntity(createEntityDTO);
+    public Task<ResponseEntityDTO> CreateEntity(CreateEntityDTO createEntityDTO)
+    {
+        throw new NotImplementedException();
+    }
 
-    //    return createEntity;
-    //}
+    public Task<ResponseProductDTO> CreateProduct(CreateProductDTO createProductDTO)
+    {
+        throw new NotImplementedException();
+    }
 
-    //public Task<ProductDTO> CreateProduct(CreateProductDTO createProductDTO)
-    //{
-    //    throw new NotImplementedException();
-    //}
+    public async Task<ResponseEntityDTO> GetEntity(int entityId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<ResponseProductDTO> GetProduct(int productId)
+    {
+        throw new NotImplementedException();
+    }
 }
