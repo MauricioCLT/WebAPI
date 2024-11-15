@@ -10,4 +10,6 @@ public class Customer
     public DateTime BirthDate { get; set; }
     public List<Account> Accounts { get; set; } = [];
     public List<Card> Cards { get; set; } = [];
+
+    public List<EntityCustomer> EntityCustomers { get; set; } = null!;
 }

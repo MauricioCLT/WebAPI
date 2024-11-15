@@ -1,5 +1,6 @@
 ﻿using Core.DTOs.Card;
 using Core.DTOs.Charge;
+using Core.DTOs.Payment;
 using Core.Entities;
 using Core.Interfaces.Repositories;
 using Infraestructura.Contexts;
@@ -59,6 +60,19 @@ public class CardRepository : ICardRepository
         return chargeToCreate.Adapt<ChargeDTO>();
     }
 
+    public async Task<PaymentDTO> CreatePayment(CreatePaymentDTO createPaymentDTO)
+    {
+        var paymentToCreate = createPaymentDTO.Adapt<Payment>();
+
+        var card = await _context.Cards.FindAsync(createPaymentDTO.CardId);
+        card!.AvailableCredit += createPaymentDTO.Amount;
+
+        _context.Payments.Add(paymentToCreate);
+        await _context.SaveChangesAsync();
+
+        return paymentToCreate.Adapt<PaymentDTO>();
+    }
+
     public async Task<bool> VerifyChargeAmount(int cardId, decimal amount)
     {
         var card = await _context.Cards.FindAsync(cardId);
@@ -67,5 +81,10 @@ public class CardRepository : ICardRepository
             throw new Exception("No se encontro la tarjeta con el id provisto");
 
         return card.AvailableCredit >= amount;
+    }
+
+    public Task<bool> VerifyPaymentAmount(int cardId, decimal amount)
+    {
+        throw new NotImplementedException();
     }
 }

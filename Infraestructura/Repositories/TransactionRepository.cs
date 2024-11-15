@@ -1,5 +1,4 @@
-﻿using Core.DTOs.Payment;
-using Core.DTOs.Transactions;
+﻿using Core.DTOs.Transactions;
 using Core.Interfaces.Repositories;
 using Infraestructura.Contexts;
 using Microsoft.EntityFrameworkCore;

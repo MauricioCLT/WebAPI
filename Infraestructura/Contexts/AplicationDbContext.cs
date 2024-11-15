@@ -11,6 +11,9 @@ public partial class AplicationDbContext : DbContext
     public DbSet<Card> Cards { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Charge> Charges { get; set; }
+    public DbSet<Entity> Entities { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<EntityCustomer> EntitiesCustomers { get; set; }
 
     public AplicationDbContext()
     {}
@@ -24,6 +27,9 @@ public partial class AplicationDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CardConfiguration());
         modelBuilder.ApplyConfiguration(new ChargeConfiguration());
         modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+        modelBuilder.ApplyConfiguration(new EntityConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
+        modelBuilder.ApplyConfiguration(new EntityCustomerConfiguration());
     }
 
     partial void OnModelCratingPartial(ModelBuilder modelBuilder);

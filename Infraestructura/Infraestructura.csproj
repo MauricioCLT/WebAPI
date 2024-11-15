@@ -25,4 +25,9 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validation\Entity\" />
+    <Folder Include="Validation\Product\" />
+  </ItemGroup>
+
 </Project>
