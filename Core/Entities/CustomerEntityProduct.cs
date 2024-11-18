@@ -2,6 +2,7 @@
 
 public class CustomerEntityProduct
 {
+    public int Id { get; set; }
     public int EntityCustomerId { get; set; }
     public int ProductId { get; set; }
     public EntityCustomer EntityCustomer { get; set; } = null!;

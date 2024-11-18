@@ -1,6 +1,4 @@
-﻿using Core.DTOs.Product;
-
-namespace Core.DTOs.Entity;
+﻿namespace Core.DTOs.Entity;
 
 public class ResponseEntityDTO
 {

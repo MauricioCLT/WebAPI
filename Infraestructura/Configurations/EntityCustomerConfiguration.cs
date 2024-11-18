@@ -17,5 +17,9 @@ public class EntityCustomerConfiguration : IEntityTypeConfiguration<EntityCustom
         entity.HasOne(e => e.Entity)
               .WithMany(e => e.EntityCustomers)
               .HasForeignKey(e => e.EntityId);
+        
+        entity.HasMany(x => x.CustomersEntitiesProducts)
+              .WithOne(e => e.EntityCustomer)
+              .HasForeignKey(e => e.EntityCustomerId);
     }
 }

@@ -5,6 +5,6 @@ namespace Core.Interfaces.Repositories;
 
 public interface IEntityRepository
 {
-    Task<ResponseEntityDTO> CreateEntity(CreateEntityDTO createEntityDTO);
-    Task<List<ResponseEntityDTO>> GetEntities(int customerId);
+    Task<ResponseEntityDTO> CreateEntity(int id, CreateEntityDTO createEntityDTO);
+    Task<ResponseEntityDTO> GetEntities(int customerId);
 }

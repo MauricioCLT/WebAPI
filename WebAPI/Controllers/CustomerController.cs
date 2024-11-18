@@ -1,5 +1,7 @@
 ﻿using Core.DTOs.Customer;
+using Core.DTOs.Entity;
 using Core.Interfaces.Repositories;
+using Core.Interfaces.Services;
 using Core.Request;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -13,18 +15,24 @@ public class CustomerController : BaseApiController
     private readonly IEntityRepository _entityRepository;
     private readonly IValidator<CreateCustomerDTO> _validateCreateCustomerDTO;
     private readonly IValidator<UpdateCustomerDTO> _updateCustomerDTO;
+    private readonly ICustomerEntityProductRepository _customerEntityProductRepository;
+    private readonly ICustomerService _customerService;
 
     public CustomerController(
-        ICustomerRepository customerRepository, 
-        IValidator<CreateCustomerDTO> validateCreateCustomerDTO,
-        IValidator<UpdateCustomerDTO> updateCustomerDTO,
-        IEntityRepository entityRepository
+            ICustomerRepository customerRepository,
+            IValidator<CreateCustomerDTO> validateCreateCustomerDTO,
+            IValidator<UpdateCustomerDTO> updateCustomerDTO,
+            IEntityRepository entityRepository,
+            ICustomerEntityProductRepository customerEntityProductRepository,
+            ICustomerService customerService
         )
     {
         _customerRepository = customerRepository;
         _validateCreateCustomerDTO = validateCreateCustomerDTO;
         _updateCustomerDTO = updateCustomerDTO;
         _entityRepository = entityRepository;
+        _customerEntityProductRepository = customerEntityProductRepository;
+        _customerService = customerService;
     }
 
     [HttpGet("list")]
@@ -43,9 +51,9 @@ public class CustomerController : BaseApiController
     public async Task<IActionResult> Add([FromBody] CreateCustomerDTO createCustomerDTO)
     {
         var result = await _validateCreateCustomerDTO.ValidateAsync(createCustomerDTO);
-        if (!result.IsValid) 
+        if (!result.IsValid)
             return BadRequest(result.Errors);
-                
+
         return Ok(await _customerRepository.Add(createCustomerDTO));
     }
 
@@ -65,10 +73,21 @@ public class CustomerController : BaseApiController
         return Ok(await _customerRepository.Delete(id));
     }
 
-    [HttpGet("Entities/{id}")]
-    public async Task<IActionResult> GetAllEntities(int id)
+    // GET para las entidades y productos de un customer
+    [HttpGet("{id}/entities")]
+    public async Task<IActionResult> GetCustomerEntitiesProducts([FromRoute] int id)
     {
-        return Ok(await _entityRepository.GetEntities(id));
+        var result = await _customerService.GetEntities(id);
+
+        if (result == null)
+            return BadRequest("No entities found");
+
+        return Ok(result);
     }
 
+    [HttpPost("{id}/entities")]
+    public async Task<IActionResult> CreateEntityProduct([FromRoute] int id, [FromBody] CreateEntityDTO createEnityDTO)
+    {
+        return Ok(await _entityRepository.CreateEntity(id, createEnityDTO));
+    }
 }

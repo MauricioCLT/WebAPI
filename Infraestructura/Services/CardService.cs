@@ -1,5 +1,4 @@
-﻿using Core.DTOs.Card;
-using Core.DTOs.Charge;
+﻿using Core.DTOs.Charge;
 using Core.DTOs.Payment;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;

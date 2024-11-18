@@ -21,9 +21,13 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         entity.Property(x => x.StartDate)
             .IsRequired();
-
+        
         entity.HasOne(x => x.Entity)
               .WithMany(x => x.Products)
               .HasForeignKey(x => x.EntityId);
+        
+        entity.HasMany(x => x.CustomersEntitiesProducts)
+            .WithOne(x => x.Product)
+            .HasForeignKey(x => x.ProductId);
     }
 }

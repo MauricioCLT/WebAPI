@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infraestructura.Configurations;
 
-public class CustomerEntitieProductConfiguration : IEntityTypeConfiguration<CustomerEntityProduct>
+public class CustomerEntityProductConfiguration : IEntityTypeConfiguration<CustomerEntityProduct>
 {
     public void Configure(EntityTypeBuilder<CustomerEntityProduct> entity)
     {
-        entity.HasKey(e => e.EntityCustomerId);
+        entity.HasKey(e => e.Id);
 
         entity.HasOne(x => x.EntityCustomer)
               .WithMany(x => x.CustomersEntitiesProducts)

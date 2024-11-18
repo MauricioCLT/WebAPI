@@ -14,6 +14,7 @@ public partial class AplicationDbContext : DbContext
     public DbSet<Entity> Entities { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<EntityCustomer> EntitiesCustomers { get; set; }
+    public DbSet<CustomerEntityProduct> CustomerEntityProducts { get; set; }
 
     public AplicationDbContext()
     {}
@@ -30,6 +31,7 @@ public partial class AplicationDbContext : DbContext
         modelBuilder.ApplyConfiguration(new EntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
         modelBuilder.ApplyConfiguration(new EntityCustomerConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerEntityProductConfiguration());
     }
 
     partial void OnModelCratingPartial(ModelBuilder modelBuilder);

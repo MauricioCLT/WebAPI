@@ -1,5 +1,6 @@
 ﻿using Core.DTOs.Customer;
 using Core.DTOs.Entity;
+using Core.DTOs.Product;
 using Core.Entities;
 using Mapster;
 
@@ -31,10 +32,34 @@ public class CustomersMappingConfiguration : IRegister
             .Map(dest => dest.Email, src => src.Email)
             .Map(dest => dest.BirthDate, src => src.BirthDate);
 
-        config.NewConfig<CreateCustomerDTO, Customer>()
-            .Map(dest => dest.FirstName, src => src.FirstName);
+        // config.NewConfig<CreateCustomerDTO, Customer>()
+        //    .Map(dest => dest.FirstName, src => src.FirstName);
 
-        config.NewConfig<CreateEntityDTO, Customer>()
-            .Map(dest => dest.Id, src => src.CustomerId);
+        // config.NewConfig<CreateEntityDTO, Customer>()
+        //    .Map(dest => dest.Id, src => src.CustomerId);
+
+        // CreateEntityDTO a Product
+        config.NewConfig<CreateEntityDTO, Product>()
+            .Map(dest => dest.ProductName, src => src.Product.ProductName)
+            .Map(dest => dest.Status, src => "active")
+            .Map(dest => dest.ProductDescription, src => src.Product.ProductDescription)
+            .Map(dest => dest.StartDate, src => DateTime.UtcNow);
+
+        // CreateEntityDTO a Entity
+        config.NewConfig<CreateEntityDTO, Entity>()
+            .Map(dest => dest.EntityName, src => src.EntityName);
+
+        // 
+        config.NewConfig<EntityCustomer, ClientEntityDTO>()
+            .Map(dest => dest.EntityName, src => src.Entity.EntityName)
+            .Map(dest => dest.Products, src => src.Entity.Products
+                .Select(p => p.Adapt<ProductDTO>()));
+
+        // ResponseProductDTO
+        config.NewConfig<Product, ResponseProductDTO>()
+            .Map(dest => dest.ProductName, src => src.ProductName)
+            .Map(dest => dest.Status, src => src.Status)
+            .Map(dest => dest.ProductDescription, src => src.ProductDescription)
+            .Map(dest => dest.StartDate, src => src.StartDate.ToShortDateString());
     }
 }
