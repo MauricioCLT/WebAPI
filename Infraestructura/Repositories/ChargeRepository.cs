@@ -3,7 +3,6 @@ using Core.Entities;
 using Core.Interfaces.Repositories;
 using Infraestructura.Contexts;
 using Mapster;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Infraestructura.Repositories;
 

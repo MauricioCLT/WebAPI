@@ -19,11 +19,19 @@ namespace Infraestructura.Repositories
 
         public async Task<ResponseEntityDTO> CreateEntity(int id, CreateEntityDTO createEntityDTO)
         {
-            var entity = createEntityDTO.Adapt<Entity>();
+            var entity = createEntityDTO.Adapt<EntityCustomer>();
             var product = createEntityDTO.Product.Adapt<Product>();
 
-            _context.Entities.Add(entity);
+            var entityProduct = new CustomerEntityProduct
+            {
+                EntityCustomer = entity,
+                Product = product
+            };
+
+            _context.CustomerEntityProducts.Add(entityProduct);
             await _context.SaveChangesAsync();
+
+            return entityProduct.Adapt<ResponseEntityDTO>();
         }
 
         public async Task<ResponseEntityDTO> GetEntities(int customerId)

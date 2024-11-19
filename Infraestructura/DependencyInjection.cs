@@ -3,6 +3,7 @@ using FluentValidation;
 using Infraestructura.Contexts;
 using Infraestructura.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mapster;
@@ -18,6 +19,12 @@ using Core.DTOs.Payment;
 using Infraestructura.Validation.Payment;
 using Core.Interfaces.Services;
 using Infraestructura.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Infraestructura.AuthBearerConfiguration;
+using Core.Interfaces.Services.Auth;
+using Infraestructura.Auth;
+using Core.Jwt;
 
 namespace Infraestructura;
 
@@ -32,6 +39,7 @@ public static class DependencyInjection
         services.AddDatabase(configuration);
         services.AddValidations();
         services.AddMapping();
+        services.AddAuth();
 
         return services;
     }
@@ -47,6 +55,7 @@ public static class DependencyInjection
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IEntityRepository, EntityRepository>();
         services.AddScoped<ICustomerEntityProductRepository, CustomerEntityProductRepository>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
 
         return services;
     }
@@ -89,6 +98,52 @@ public static class DependencyInjection
 
         services.AddSingleton(config);
         services.AddScoped<IMapper, ServiceMapper>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddAuth(
+        this IServiceCollection services)
+    {
+        /*
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                };
+            });
+
+        return services;
+
+        */
+        services.ConfigureOptions<JwtOptions>();
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
+        services
+            .AddAuthentication(x => {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("5TW2f8Zv7B4yDggqAIdR+JuJQAgf8TBbJHrx5QIw3TU=")),
+                };
+            });
+
+        services.AddTransient<JwtProvider>();
 
         return services;
     }

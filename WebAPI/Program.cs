@@ -1,5 +1,4 @@
 using Infraestructura;
-using WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
