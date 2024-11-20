@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces.Services.Auth;
 using Core.Jwt;
+using Infraestructura.AuthBearerConfiguration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
@@ -11,16 +12,16 @@ namespace Infraestructura.Auth;
 
 public class JwtProvider : IJwtProvider
 {
-    private readonly JwtProperties _jwt;
+    //private readonly JwtProperties _jwt;
 
-    public JwtProvider(IOptions<JwtProperties> jwt)
-    {
-        _jwt = jwt.Value;
-        jwt.Value.JwtSecretKey = "5TW2f8Zv7B4yDggqAIdR+JuJQAgf8TBbJHrx5QIw3TU=";
-        jwt.Value.Issuer = "CLTAPI";
-        jwt.Value.Audience = "https://localhost:5139/";
-        jwt.Value.ExpirationTime = 60;
-    }
+    //public JwtProvider(IOptions<JwtProperties> jwt)
+    //{
+    //    _jwt = jwt.Value;
+    //    _jwt.JwtSecretKey = jwt.Value.JwtSecretKey;
+    //    // jwt.Value.Issuer = "CLTAPI";
+    //    // jwt.Value.Audience = "https://localhost:5139/";
+    //    // jwt.Value.ExpirationTime = 60;
+    //}
 
     public string GenerateToken(IEnumerable<string> Roles)
     {
@@ -37,15 +38,15 @@ public class JwtProvider : IJwtProvider
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.JwtSecretKey));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtProperties.JwtSecretKey));
         var signInCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-                _jwt.Issuer,
-                _jwt.Audience,
+                JwtProperties.Issuer,
+                JwtProperties.Audience,
                 claims,
                 null,
-                DateTime.UtcNow.AddMinutes(_jwt.ExpirationTime),
+                DateTime.UtcNow.AddMinutes(JwtProperties.ExpirationTime),
                 signInCredentials
         );
 

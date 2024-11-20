@@ -2,8 +2,8 @@
 
 public class JwtProperties
 {
-    public string JwtSecretKey { get; set; } = string.Empty;
-    public string Audience { get; set; } = string.Empty;
-    public string Issuer { get; set; } = string.Empty;
-    public int ExpirationTime { get; set; }
+    public static string JwtSecretKey { get; set; } = string.Empty; // "5TW2f8Zv7B4yDggqAIdR+JuJQAgf8TBbJHrx5QIw3TU=";
+    public static string Audience { get; set; } = string.Empty;
+    public static string Issuer { get; set; } = string.Empty;
+    public static int ExpirationTime { get; set; }
 }

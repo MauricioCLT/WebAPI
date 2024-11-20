@@ -39,7 +39,7 @@ public static class DependencyInjection
         services.AddDatabase(configuration);
         services.AddValidations();
         services.AddMapping();
-        services.AddAuth();
+        services.AddAuth(configuration);
 
         return services;
     }
@@ -103,28 +103,11 @@ public static class DependencyInjection
     }
 
     public static IServiceCollection AddAuth(
-        this IServiceCollection services)
+        this IServiceCollection services, 
+        IConfiguration configuration)
     {
-        /*
-        services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
-                    RequireExpirationTime = true,
-                    ValidateLifetime = true,
-                };
-            });
+        configuration.GetSection("Jwt").Get<JwtProperties>();
 
-        return services;
-
-        */
         services.ConfigureOptions<JwtOptions>();
         services.ConfigureOptions<JwtBearerOptionsSetup>();
         services
@@ -136,10 +119,12 @@ public static class DependencyInjection
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false,
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("5TW2f8Zv7B4yDggqAIdR+JuJQAgf8TBbJHrx5QIw3TU=")),
+                    RequireExpirationTime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:JwtSecretKey"]!)),
                 };
             });
 

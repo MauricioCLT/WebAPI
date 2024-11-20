@@ -10,11 +10,12 @@ public class JwtOptions : IConfigureOptions<JwtOptions>
     public JwtOptions(IConfiguration configuration)
     {
         _configuration = configuration;
+        _configuration.GetSection("Jwt").Get<JwtOptions>();
     }
 
     // 
-    public void Configure(JwtOptions options)
+    public void Configure(JwtOptions jwtOptions)
     {
-        _configuration.GetSection("Jwt").Bind(options);
+        _configuration.GetSection("Jwt").Get<JwtOptions>();
     }
 }
