@@ -8,13 +8,6 @@ namespace Infraestructura.AuthBearerConfiguration;
 
 public class JwtBearerOptionsSetup : IConfigureOptions<JwtBearerOptions>
 {
-    //private readonly JwtProperties _jwtProperties;
-    
-    //public JwtBearerOptionsSetup(IOptions<JwtProperties> jwtProperties)
-    //{
-    //    _jwtProperties = jwtProperties.Value;
-    //}
-
     public void Configure(JwtBearerOptions options)
     {
         var issuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtProperties.JwtSecretKey));

@@ -10,7 +10,6 @@ public class JwtOptions : IConfigureOptions<JwtOptions>
     public JwtOptions(IConfiguration configuration)
     {
         _configuration = configuration;
-        _configuration.GetSection("Jwt").Get<JwtOptions>();
     }
 
     // 

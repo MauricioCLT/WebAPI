@@ -16,13 +16,12 @@ public class AuthController : BaseApiController
     // Generate a secret jwt
     [HttpGet("Generate-Token")]
     [AllowAnonymous]
-    public IActionResult GenerateToken([FromQuery] IEnumerable<string> roles)
+    public IActionResult GenerateToken([FromQuery] IEnumerable<string> roles, [FromQuery] string name)
     {
-        string token = _jwtProvider.GenerateToken(roles);
+        string token = _jwtProvider.GenerateToken(roles, name);
 
         return Ok(token);
     }
-
 
     // Get a Ok if the secret token is correct 
     [HttpGet("Protected-Endpoint")]

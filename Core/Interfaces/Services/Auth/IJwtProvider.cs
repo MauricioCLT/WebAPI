@@ -2,5 +2,5 @@
 
 public interface IJwtProvider
 {
-    string GenerateToken(IEnumerable<string> Roles);
+    string GenerateToken(IEnumerable<string> Roles, string name);
 }
